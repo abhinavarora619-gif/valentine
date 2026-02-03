@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Valentine</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #0f2027;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+
+.card {
+  background: #ffffff;
+  padding: 28px 24px 30px;
+  border-radius: 18px;
+  width: 92%;
+  max-width: 380px;
+  text-align: center;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+h1 {
+  margin: 0 0 14px;
+  font-size: 24px;
+}
+
+p {
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 18px;
+}
+
+.buttons {
+  position: relative;
+  height: 130px;
+}
+
+button {
+  width: 180px;
+  padding: 14px;
+  font-size: 16px;
+  border-radius: 30px;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+#yesBtn {
+  background: #111;
+  color: #fff;
+  bottom: 0;
+}
+
+#noBtn {
+  background: #e0e0e0;
+  color: #333;
+  top: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+video {
+  width: 100%;
+  border-radius: 14px;
+  margin-top: 14px;
+}
+
+.photos {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.photos img {
+  width: 48%;
+  border-radius: 12px;
+}
+
+/* Fade-in final line */
+.final-line {
+  margin-top: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  opacity: 0;
+  animation: fadeUp 1.2s ease forwards;
+  animation-delay: 1.2s;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Confetti */
+.confetti {
+  position: fixed;
+  top: -10px;
+  font-size: 18px;
+  animation: fall 3s linear forwards;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="page1">
+  <h1>Quick question.</h1>
+  <p>I’m not dramatic. I just know what I want.</p>
+
+  <h1>Will you be my Valentine?</h1>
+
+  <div class="buttons">
+    <button id="noBtn">Not a chance</button>
+    <button id="yesBtn">Of course</button>
+  </div>
+</div>
+
+<div class="card hidden" id="page2">
+  <h1>Knew it.</h1>
+  <p>Love you my babeu ❤️</p>
+
+  <video id="surpriseVideo" playsinline muted loop>
+    <source src="surprise.mp4" type="video/mp4">
+  </video>
+
+  <div class="photos">
+    <img src="photo1.jpg" onerror="this.src='Photo1.jpg'">
+    <img src="photo2.jpg" onerror="this.src='Photo2.jpg'">
+  </div>
+
+  <!-- FINAL FADE-IN LINE -->
+  <div class="final-line">
+    Same answer. Every year.
+  </div>
+</div>
+
+<script>
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const video = document.getElementById("surpriseVideo");
+
+function runAway() {
+  const x = Math.random() * 180 - 90;
+  const y = Math.random() * 70 - 35;
+  noBtn.style.transform = `translate(${x}px, ${y}px) translateX(-50%)`;
+}
+
+noBtn.addEventListener("mouseenter", runAway);
+noBtn.addEventListener("touchstart", runAway);
+
+yesBtn.addEventListener("click", () => {
+  page1.classList.add("hidden");
+  page2.classList.remove("hidden");
+
+  video.muted = false;
+  video.currentTime = 0;
+  video.play().catch(() => {});
+
+  launchConfetti();
+});
+
+function launchConfetti() {
+  for (let i = 0; i < 25; i++) {
+    const c = document.createElement("div");
+    c.className = "confetti";
+    c.innerText = ["🎉","❤️","✨","💖"][Math.floor(Math.random()*4)];
+    c.style.left = Math.random() * 100 + "vw";
+    c.style.animationDuration = (Math.random() * 1.5 + 2) + "s";
+    document.body.appendChild(c);
+    setTimeout(() => c.remove(), 3000);
+  }
+}
+</script>
+
+</body>
+</html>
